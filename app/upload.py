@@ -61,14 +61,14 @@ def save_to_database(key, predict):
     cursor = cnx.cursor()
 
     query = ''' UPDATE images SET predict=%s WHERE imageKey = %s '''
-    cursor.execute(query, (str(predict), key))
+    cursor.execute(query, (predict, key))
     cnx.commit()
 
 
 @celery.task
 def classify(key, tmp_path):
     print '>>>>>>>>>>>>>>>>>>>>>>>>> begin celery predict task <<<<<<<<<<<<<<<<<<<<<<<<<'
-    predict = 'empty'
+    predict = []
 
     try:
         with webapp.app_context():
@@ -77,5 +77,5 @@ def classify(key, tmp_path):
     finally:
         os.remove(tmp_path)
         with webapp.app_context():
-            save_to_database(key, predict)
+            save_to_database(key, str(predict))
         print '>>>>>>>>>>>>>>>>>>>>>>>>> celery predict task done <<<<<<<<<<<<<<<<<<<<<<<<<'
