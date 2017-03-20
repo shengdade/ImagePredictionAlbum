@@ -37,9 +37,10 @@ CREATE TABLE IF NOT EXISTS `ece1780`.`users` (
 DROP TABLE IF EXISTS `ece1780`.`images`;
 
 CREATE TABLE IF NOT EXISTS `ece1780`.`images` (
-  `id`     INT          NOT NULL AUTO_INCREMENT,
-  `userId` INT          NOT NULL,
-  `predict`   VARCHAR(512) NOT NULL,
+  `id`      INT          NOT NULL AUTO_INCREMENT,
+  `userId`  INT          NOT NULL,
+  `imageKey`     VARCHAR(255) NOT NULL,
+  `predict` VARCHAR(512) NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_images_users_idx` (`userId` ASC),
   CONSTRAINT `fk_images_users`

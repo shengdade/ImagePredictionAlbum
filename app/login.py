@@ -8,7 +8,7 @@ import config
 from app import webapp
 from utils import get_db, ServerError
 
-webapp.secret_key = '\x8e\xfa\xbf\xff\x07A&\x84\xec\xc1\xad+c=\xd3:hC\x98*\xc4\xcc8\xcd'
+webapp.secret_key = '\x96\xc5\xf5\x06\x0fs\x0e\xf0\x15\xd5H\xb3\x03`\xab\xd1U=\x07W\xd1C+\xc3'
 
 
 @webapp.before_request
@@ -29,13 +29,14 @@ def index():
         cnx = get_db()
         cursor = cnx.cursor()
 
-        query = '''SELECT images.key1 FROM users, images WHERE users.id = images.userId AND users.login = %s'''
+        query = '''SELECT images.imageKey FROM users, images WHERE users.id = images.userId AND users.login = %s'''
         cursor.execute(query, (username,))
 
         s3_cli = boto3.client('s3', **config.conn_args)
         url_list = []
         for key in cursor:
-            url = s3_cli.generate_presigned_url('get_object', Params={'Bucket': username, 'Key': key[0]}, ExpiresIn=300)
+            url = s3_cli.generate_presigned_url('get_object', Params={'Bucket': config.bucket_name, 'Key': key[0]},
+                                                ExpiresIn=300)
             url_list.append((key[0], url))
 
         username_session = escape(session['username']).capitalize()
@@ -94,7 +95,7 @@ def register():
     error = "register successfully, please log in"
     try:
         s3 = boto3.client('s3', **config.conn_args)
-        s3.create_bucket(Bucket=username_form)
+        s3.create_bucket(Bucket=config.bucket_name)
 
         cnx = get_db()
         cursor = cnx.cursor()
@@ -125,4 +126,4 @@ def logout():
 
 @webapp.route('/admin')
 def admin():
-    return redirect("http://ec2-54-175-182-31.compute-1.amazonaws.com/", code=302)
+    return 'No admin right now.'
