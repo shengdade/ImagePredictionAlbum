@@ -43,14 +43,12 @@
 </nav>
 
 
-<div id='photos' class="container-fluid" style="padding: 10px 30px 30px;">
+<div id='photos' class="container">
     <div class="row">
         <div class="col-md-6">
             <div class="thumbnail" style="background:black">
                 <img src="{{ image_url }}" style="width: 100%">
             </div>
-        </div>
-        <div class="col-md-6">
             <table class="table table-bordered table-hover table-responsive">
                 <thead>
                 <tr class="danger">
@@ -81,7 +79,10 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="col-md-6">
             <canvas id="myChart"></canvas>
+            <canvas id="myChart2"></canvas>
         </div>
     </div>
 </div>
@@ -93,24 +94,94 @@
             labels: [
                 "{{ predict[0][1] }}",
                 "{{ predict[1][1] }}",
-                "{{ predict[2][1] }}"
+                "{{ predict[2][1] }}",
+                "{{ predict[3][1] }}",
+                "{{ predict[4][1] }}"
             ],
             datasets: [
                 {
-                    data: [{{ predict[0][2] }}, {{ predict[1][2] }}, {{ predict[1][2] }}],
-                    backgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56"
+                    data: [
+                        {{ predict[0][2] }},
+                        {{ predict[1][2] }},
+                        {{ predict[2][2] }},
+                        {{ predict[3][2] }},
+                        {{ predict[4][2] }}
                     ],
-                    hoverBackgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56"
+                    backgroundColor: [
+                        "#f1c40f",
+                        "#2ecc71",
+                        "#3498db",
+                        "#34495e",
+                        "#95a5a6"
+                    ],
+                    borderWidth: [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    hoverBorderWidth: [
+                        1,
+                        1,
+                        1,
+                        1,
+                        1
                     ]
                 }]
         },
-        options: {}
+        options: {
+            legend: {
+                position: 'top'
+            },
+            animation: {
+                animateScale: true
+            }
+        }
+    });
+    var ctx2 = document.getElementById("myChart2");
+    var myChart2 = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: [
+                "{{ predict[0][1] }}",
+                "{{ predict[1][1] }}",
+                "{{ predict[2][1] }}",
+                "{{ predict[3][1] }}",
+                "{{ predict[4][1] }}"
+            ],
+            datasets: [
+                {
+                    data: [
+                        {{ predict[0][2] }},
+                        {{ predict[1][2] }},
+                        {{ predict[2][2] }},
+                        {{ predict[3][2] }},
+                        {{ predict[4][2] }}
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 99, 132, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            legend: {
+                display: false
+            }
+        }
     });
 </script>
 </body>
