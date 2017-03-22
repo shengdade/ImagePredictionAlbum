@@ -10,7 +10,7 @@ from deep_models.vgg16 import VGG16
 
 
 def classify_image(img_path):
-    model = ResNet50(weights='imagenet')
+    model = VGG16(weights='imagenet')
 
     img = image.load_img(img_path, target_size=(224, 224))
     x = image.img_to_array(img)
@@ -24,6 +24,6 @@ def classify_image(img_path):
 if __name__ == '__main__':
     test_image_path = './static/elephant.jpg'
     start_time = time.time()
-    print classify_image(test_image_path)
+    print(classify_image(test_image_path))
     elapsed_time = time.time() - start_time
-    print '\nTime for prediction: ' + str(elapsed_time) + ' seconds'
+    print('\nTime for prediction: ' + str(elapsed_time) + ' seconds')
