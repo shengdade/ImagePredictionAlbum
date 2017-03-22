@@ -5,7 +5,6 @@ from keras.utils.data_utils import get_file
 from keras import backend as K
 
 CLASS_INDEX = None
-# CLASS_INDEX_PATH = 'https://s3.amazonaws.com/deep-learning-deep_models/image-deep_models/imagenet_class_index.json'
 CLASS_INDEX_PATH = 'https://s3.amazonaws.com/deep-learning-models/image-models/imagenet_class_index.json'
 
 
@@ -39,7 +38,7 @@ def decode_predictions(preds, top=5):
     if CLASS_INDEX is None:
         fpath = get_file('imagenet_class_index.json',
                          CLASS_INDEX_PATH,
-                         cache_subdir='deep_models')
+                         cache_subdir='models')
         CLASS_INDEX = json.load(open(fpath))
     results = []
     for pred in preds:

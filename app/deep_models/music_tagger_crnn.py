@@ -139,11 +139,11 @@ def MusicTaggerCRNN(weights='msd', input_tensor=None,
         if K.image_dim_ordering() == 'tf':
             weights_path = get_file('music_tagger_crnn_weights_tf_kernels_tf_dim_ordering.h5',
                                     TF_WEIGHTS_PATH,
-                                    cache_subdir='deep_models')
+                                    cache_subdir='models')
         else:
             weights_path = get_file('music_tagger_crnn_weights_tf_kernels_th_dim_ordering.h5',
                                     TH_WEIGHTS_PATH,
-                                    cache_subdir='deep_models')
+                                    cache_subdir='models')
         model.load_weights(weights_path, by_name=True)
         if K.backend() == 'theano':
             convert_all_kernels_in_model(model)

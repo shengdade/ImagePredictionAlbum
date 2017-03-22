@@ -1,8 +1,12 @@
+import time
+
 import numpy as np
 from keras.preprocessing import image
 
 from deep_models.imagenet_utils import preprocess_input, decode_predictions
 from deep_models.resnet50 import ResNet50
+from deep_models.vgg19 import VGG19
+from deep_models.vgg16 import VGG16
 
 
 def classify_image(img_path):
@@ -15,3 +19,11 @@ def classify_image(img_path):
 
     preds = model.predict(x)
     return decode_predictions(preds)
+
+
+if __name__ == '__main__':
+    test_image_path = './static/elephant.jpg'
+    start_time = time.time()
+    print classify_image(test_image_path)
+    elapsed_time = time.time() - start_time
+    print '\nTime for prediction: ' + str(elapsed_time) + ' seconds'
