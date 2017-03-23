@@ -127,3 +127,13 @@ def logout():
 @webapp.route('/admin')
 def admin():
     return 'No admin right now.'
+
+
+@webapp.route('/a1')
+def hello():
+    return redirect("http://ece1779-a1-548293034.us-east-1.elb.amazonaws.com", code=302)
+
+
+@webapp.route('/a1-admin')
+def hello():
+    return redirect("http://ec2-54-175-182-31.compute-1.amazonaws.com", code=302)
