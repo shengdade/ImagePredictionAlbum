@@ -37,7 +37,7 @@ def file_upload():
         key = os.path.basename(path)
         try:
             image.save(filename=path)
-            with os.fdopen(fd, 'r') as tmp:
+            with os.fdopen(fd, 'br') as tmp:
                 s3.upload_fileobj(tmp, config.bucket_name, key)
         finally:
             classify.delay(key, path)
