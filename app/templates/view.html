@@ -43,12 +43,18 @@
 </nav>
 
 
-<div id='photos' class="container">
+<div id='photos' class="container-fluid">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="thumbnail" style="background:black">
                 <img src="{{ image_url }}" style="width: 100%">
             </div>
+        </div>
+        <div class="col-md-4">
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="col-md-4">
+            <canvas id="myChart2"></canvas>
             <table class="table table-bordered table-hover table-responsive">
                 <thead>
                 <tr class="danger">
@@ -79,10 +85,6 @@
                 </tr>
                 </tbody>
             </table>
-        </div>
-        <div class="col-md-6">
-            <canvas id="myChart"></canvas>
-            <canvas id="myChart2"></canvas>
         </div>
     </div>
 </div>
