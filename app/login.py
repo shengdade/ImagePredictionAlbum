@@ -130,10 +130,10 @@ def admin():
 
 
 @webapp.route('/a1')
-def hello():
+def a1():
     return redirect("http://ece1779-a1-548293034.us-east-1.elb.amazonaws.com", code=302)
 
 
 @webapp.route('/a1-admin')
-def hello():
+def a1_admin():
     return redirect("http://ec2-54-175-182-31.compute-1.amazonaws.com", code=302)
