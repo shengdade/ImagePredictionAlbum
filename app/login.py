@@ -2,7 +2,7 @@ from datetime import timedelta
 
 import boto3
 from botocore.client import ClientError
-from flask import redirect, render_template, request, session, url_for, escape
+from flask import redirect, render_template, request, session, url_for, escape, send_from_directory
 
 from app import config
 from app import webapp
@@ -137,3 +137,8 @@ def a1():
 @webapp.route('/a1-admin')
 def a1_admin():
     return redirect("http://ec2-54-175-182-31.compute-1.amazonaws.com", code=302)
+
+
+@webapp.route('/iPre.apk')
+def download_apk():
+    return send_from_directory('static', 'iPre.apk')
