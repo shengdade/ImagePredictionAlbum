@@ -3,9 +3,9 @@ import ast
 import boto3
 from flask import render_template, request, session, redirect, url_for, escape
 
-import config
+from app import config
 from app import webapp
-from utils import get_db, ServerError
+from app.utils import get_db, ServerError
 
 
 @webapp.route('/view', methods=['POST'])
@@ -31,7 +31,7 @@ def image_view():
             raise ServerError('Invalid image key')
 
     except ServerError:
-        print 'ServerError: Invalid image key'
+        print('ServerError: Invalid image key')
         return redirect(url_for('index'))
 
     s3_cli = boto3.client('s3', **config.conn_args)

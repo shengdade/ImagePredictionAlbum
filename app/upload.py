@@ -5,10 +5,10 @@ import boto3
 from flask import request, session, redirect, url_for
 from wand.image import Image
 
-import config
+from app import config
 from app import webapp, celery
-from classify import classify_image
-from utils import get_db
+from app.classify import classify_image
+from app.utils import get_db
 
 
 @webapp.route('/upload', methods=['POST'])
@@ -67,7 +67,7 @@ def save_to_database(key, predict):
 
 @celery.task
 def classify(key, tmp_path):
-    print '>>>>>>>>>>>>>>>>>>>>>>>>> begin celery predict task <<<<<<<<<<<<<<<<<<<<<<<<<'
+    print('>>>>>>>>>>>>>>>>>>>>>>>>> begin celery predict task <<<<<<<<<<<<<<<<<<<<<<<<<')
     predict = []
 
     try:
@@ -78,4 +78,4 @@ def classify(key, tmp_path):
         os.remove(tmp_path)
         with webapp.app_context():
             save_to_database(key, str(predict))
-        print '>>>>>>>>>>>>>>>>>>>>>>>>> celery predict task done <<<<<<<<<<<<<<<<<<<<<<<<<'
+        print('>>>>>>>>>>>>>>>>>>>>>>>>> celery predict task done <<<<<<<<<<<<<<<<<<<<<<<<<')
