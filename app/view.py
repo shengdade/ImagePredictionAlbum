@@ -3,9 +3,9 @@ import ast
 import boto3
 from flask import render_template, request, session, redirect, url_for, escape
 
-from app import config
-from app import webapp
-from app.utils import get_db, ServerError
+from . import config
+from . import webapp
+from .utils import get_db, ServerError
 
 
 @webapp.route('/view', methods=['POST'])

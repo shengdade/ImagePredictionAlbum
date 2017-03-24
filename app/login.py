@@ -4,9 +4,9 @@ import boto3
 from botocore.client import ClientError
 from flask import redirect, render_template, request, session, url_for, escape, send_from_directory
 
-from app import config
-from app import webapp
-from app.utils import get_db, ServerError
+from . import config
+from . import webapp
+from .utils import get_db, ServerError
 
 webapp.secret_key = '\x96\xc5\xf5\x06\x0fs\x0e\xf0\x15\xd5H\xb3\x03`\xab\xd1U=\x07W\xd1C+\xc3'
 

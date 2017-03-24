@@ -1,8 +1,8 @@
 import mysql.connector
 from flask import g
 
-from app import webapp
-from app.config import db_config
+from . import webapp
+from .config import db_config
 
 
 def connect_to_database():

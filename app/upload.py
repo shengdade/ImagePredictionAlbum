@@ -5,10 +5,10 @@ import boto3
 from flask import request, session, redirect, url_for
 from wand.image import Image
 
-from app import config
-from app import webapp, celery
-from app.classify import classify_image
-from app.utils import get_db
+from . import config
+from . import webapp, celery
+from .classify import classify_image
+from .utils import get_db
 
 
 @webapp.route('/upload', methods=['POST'])
