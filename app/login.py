@@ -14,7 +14,7 @@ webapp.secret_key = '\x96\xc5\xf5\x06\x0fs\x0e\xf0\x15\xd5H\xb3\x03`\xab\xd1U=\x
 @webapp.before_request
 def make_session_permanent():
     session.permanent = True
-    webapp.permanent_session_lifetime = timedelta(minutes=5)
+    webapp.permanent_session_lifetime = timedelta(minutes=60)
 
 
 @webapp.route('/index', methods=['GET'])
@@ -36,7 +36,7 @@ def index():
         url_list = []
         for key in cursor:
             url = s3_cli.generate_presigned_url('get_object', Params={'Bucket': config.bucket_name, 'Key': key[0]},
-                                                ExpiresIn=300)
+                                                ExpiresIn=600)
             url_list.append((key[0], url))
 
         username_session = escape(session['username']).capitalize()

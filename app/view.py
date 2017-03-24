@@ -36,7 +36,7 @@ def image_view():
 
     s3_cli = boto3.client('s3', **config.conn_args)
     url = s3_cli.generate_presigned_url('get_object', Params={'Bucket': config.bucket_name, 'Key': row[0]},
-                                        ExpiresIn=60)
+                                        ExpiresIn=600)
 
     predict = row[1]
     if predict != 'unpredicted':
