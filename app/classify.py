@@ -7,6 +7,7 @@ from app.deep_models.imagenet_utils import preprocess_input, decode_predictions
 from app.deep_models.vgg16 import VGG16
 from app.deep_models.resnet50 import ResNet50
 from app.deep_models.vgg19 import VGG19
+from app.deep_models.inception_v3 import InceptionV3
 
 
 def classify_image(img_path):
