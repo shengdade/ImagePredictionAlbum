@@ -92,7 +92,7 @@
 
 % *** CITATION PACKAGES ***
 %
-%\usepackage{cite}
+\usepackage{cite}
 % cite.sty was written by Donald Arseneau
 % V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
 % \cite{} output to follow that of the IEEE. Loading the cite package will
@@ -291,7 +291,7 @@
 
 % *** PDF, URL AND HYPERLINK PACKAGES ***
 %
-%\usepackage{url}
+\usepackage{url}
 % url.sty was written by Donald Arseneau. It provides better support for
 % handling and breaking URLs. url.sty is already installed on most LaTeX
 % systems. The latest version and documentation can be obtained at:
@@ -320,7 +320,7 @@
 % not capitalized unless they are the first or last word of the title.
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
-\title{iPre: A Mobile App for Image Classification}
+\title{iPre: A Cross-platform Mobile App\\for Image Classification}
 
 
 % author names and affiliations
@@ -390,24 +390,31 @@ The abstract goes here.
 
 \section{Introduction}
 % no \IEEEPARstart
-This demo file is intended to serve as a ``starter file''
-for IEEE conference papers produced under \LaTeX\ using
-IEEEtran.cls version 1.8b and later.
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
-I wish you the best of success.
+Our brains make vision seem easy. It doesn't take any effort for humans to tell apart a lion and a jaguar, read a sign, or recognize a human's face. But these are actually hard problems to solve with a computer: they only seem easy because our brains are incredibly good at understanding images.
 
-\hfill mds
- 
-\hfill August 26, 2015
+In the last few years the field of machine learning has made tremendous progress on addressing these difficult problems. In particular, it's been found that a kind of model called a deep convolutional neural network can achieve reasonable performance on hard visual recognition tasks -- matching or exceeding human performance in some domains.
 
-\subsection{Subsection Heading Here}
-Subsection text here.
+Researchers have demonstrated steady progress in computer vision by validating their work against ImageNet -- an academic benchmark for computer vision. Successive models continue to show improvements, each time achieving a new state-of-the-art result: QuocNet, AlexNet, Inception (GoogLeNet), BN-Inception-v2. At the meantime, Python libraries for numerical computation in the field of machine learning have been developed, such as TensorFlow and Theano. Keras is a high-level neural networks API, written in Python and capable of running on top of either TensorFlow or Theano. It was developed with a focus on enabling fast experimentation. There are many trained image classification models for Keras, such as VGG16, VGG19, ResNet50, and Inception v3.
 
+iPre, is a mobile app for image classification using Keras library with VGG16\cite{vgg16} model. It behaves like a photo album. After registering an account, users can log in and upload their images. All the uploaded images would appear at main page. Clicking one of them, users would see predicted classifications of that image, presented in a pie chart, a bar chart and a probability table. All the images and their predictions are stored permanently, so users can always log back in and browse their images.
 
-\subsubsection{Subsubsection Heading Here}
-Subsubsection text here.
+\subsection{Web based application}
+The app is designed by web technologies to make it more flexible. Mobile apps are dependent on platforms. It requires different technologies to design an app in IOS and Android, or other mobile platforms. In some circumstances, a web application stands out because it's running in web browsers of both mobile and PC devices. Therefore, iPre was firstly developed as a web application, and then was migrated to an Android app. The development of Android side is rather straightforward. A web browser was embedded in the Android app to render contents fetched from remote server. In a similar way, it shouldn't take much effort to develop an IOS version, either on iPhone or iPad.
 
+\subsection{Amazon Web Services}
+Amazon Web Services (AWS), a subsidiary of Amazon.com, offers a suite of cloud computing services that make up an on-demand computing platform. These services operate from 16 geographical regions across the world. They include Amazon Elastic Compute Cloud, also known as "EC2", and Amazon Simple Storage Service, also known as "S3". 
+
+\subsubsection{S3}
+Amazon S3 (Simple Storage Service) is a web service offered by Amazon Web Services. Amazon S3 provides storage through web services interfaces.\cite{wiki:s3} The app stores all user images on S3. Once a user uploaded an image, the image would be temporarily cached on server for classification, and permanently stored in S3. In this way, it provides a stable storage and resource availability. Later on the app can display images by direct links provided by S3.
+
+\subsubsection{EC2}
+Amazon Elastic Compute Cloud (EC2) forms a central part of Amazon.com's cloud-computing platform, Amazon Web Services (AWS), by allowing users to rent virtual computers on which to run their own computer applications. EC2 encourages scalable deployment of applications by providing a web service through which a user can boot an Amazon Machine Image (AMI) to configure a virtual machine, which Amazon calls an "instance", containing any software desired.\cite{wiki:ec2} The app uses EC2 instances as backend server, which stores user data and image keys, uploads images to S3, and classify images with Keras library.
+
+\section{Implementation}
+
+\section{Experimentation}
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -547,15 +554,19 @@ The authors would like to thank...
 % <OR> manually copy in the resultant .bbl file
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
+
 \begin{thebibliography}{1}
 
-\bibitem{IEEEhowto:kopka}
-H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+\bibitem{vgg16}
+Simonyan, Karen, and Andrew Zisserman. "Very deep convolutional networks for large-scale image recognition." arXiv preprint arXiv:1409.1556 (2014).
+
+\bibitem{wiki:s3}
+Wikipedia contributors. "S3." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 4 Mar. 2017. Web. 29 Mar. 2017.
+
+\bibitem{wiki:ec2}
+Wikipedia contributors. "EC2." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 28 Apr. 2015. Web. 29 Mar. 2017.
 
 \end{thebibliography}
-
-
 
 
 % that's all folks
