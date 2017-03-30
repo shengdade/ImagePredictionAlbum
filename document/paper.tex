@@ -394,13 +394,13 @@ The abstract goes here.
 % (should never be an issue)
 Our brains make vision seem easy. It doesn't take any effort for humans to tell apart a lion and a jaguar, read a sign, or recognize a human's face. But these are actually hard problems to solve with a computer: they only seem easy because our brains are incredibly good at understanding images.
 
-In the last few years the field of machine learning has made tremendous progress on addressing these difficult problems. In particular, it's been found that a kind of model called a deep convolutional neural network can achieve reasonable performance on hard visual recognition tasks -- matching or exceeding human performance in some domains.
+In the last few years the field of machine learning has made tremendous progress on addressing these difficult problems. In particular, it's been found that a kind of model called a deep convolutional neural network can achieve reasonable performance on hard visual recognition tasks -- matching or exceeding human performance in some domains. Basically, a model needs to be trained using existing datasets, after which the model is used to predict new inputs. However, the training process can take months to be complete for quite large training datasets. For predicting an image on a mobile device, it's inappropriate to include training process and let users wait months for results. So it would be a good idea to take advantage of pre-trained neural networks.
 
 Researchers have demonstrated steady progress in computer vision by validating their work against ImageNet -- an academic benchmark for computer vision. Successive models continue to show improvements, each time achieving a new state-of-the-art result: QuocNet, AlexNet, Inception (GoogLeNet), BN-Inception-v2. At the meantime, Python libraries for numerical computation in the field of machine learning have been developed, such as TensorFlow and Theano. Keras is a high-level neural networks API, written in Python and capable of running on top of either TensorFlow or Theano. It was developed with a focus on enabling fast experimentation. There are many trained image classification models for Keras, such as VGG16, VGG19, ResNet50, and Inception v3.
 
 iPre, is a mobile app for image classification using Keras library with VGG16\cite{vgg16} model. It behaves like a photo album. After registering an account, users can log in and upload their images. All the uploaded images would appear at main page. Clicking one of them, users would see predicted classifications of that image, presented in a pie chart, a bar chart and a probability table. All the images and their predictions are stored permanently, so users can always log back in and browse their images.
 
-\subsection{Web based application}
+\subsection{Web Based Application}
 The app is designed by web technologies to make it more flexible. Mobile apps are dependent on platforms. It requires different technologies to design an app in IOS and Android, or other mobile platforms. In some circumstances, a web application stands out because it's running in web browsers of both mobile and PC devices. Therefore, iPre was firstly developed as a web application, and then was migrated to an Android app. The development of Android side is rather straightforward. A web browser was embedded in the Android app to render contents fetched from remote server. In a similar way, it shouldn't take much effort to develop an IOS version, either on iPhone or iPad.
 
 \subsection{Amazon Web Services}
@@ -412,9 +412,47 @@ Amazon S3 (Simple Storage Service) is a web service offered by Amazon Web Servic
 \subsubsection{EC2}
 Amazon Elastic Compute Cloud (EC2) forms a central part of Amazon.com's cloud-computing platform, Amazon Web Services (AWS), by allowing users to rent virtual computers on which to run their own computer applications. EC2 encourages scalable deployment of applications by providing a web service through which a user can boot an Amazon Machine Image (AMI) to configure a virtual machine, which Amazon calls an "instance", containing any software desired.\cite{wiki:ec2} The app uses EC2 instances as backend server, which stores user data and image keys, uploads images to S3, and classify images with Keras library.
 
-\section{Implementation}
+\section{Structure}
 
-\section{Experimentation}
+\subsection{Frontend Design}
+For frontend development, it involves web technologies, such as HTML, CSS, and JAVASCRIPT. In order to better fit in mobile devices, responsive web design is employed. Responsive web design (RWD) is an approach to web design aimed at allowing desktop webpages to be viewed in response to the size of the screen or web browser one is viewing with.\cite{wiki:rwd} To achieve better user interface and responsiveness, the app uses a front-end library, called Bootstrap. Bootstrap is a free and open-source front-end web framework for designing websites and web applications. It contains HTML- and CSS-based design templates for typography, forms, buttons, navigation and other interface components, as well as optional JavaScript extensions.\cite{wiki:bootstrap} Following the responsive design pattern, three main pages were designed:
+
+\subsubsection{Login Page}
+It contains two parts. First part is registration, where new users can create new accounts. User data would be permanently stored on EC2 instance database. After registration, users can log in with their usernames and passwords. JAVASCRIPT is written here to validate user inputs, to make sure all fields are not empty and passwords are matching certain criterion.
+
+\subsubsection{Main Page}
+After successful log-in, users would be taken to this log-in page, where they can view all the images they uploaded and predicted in an album. Also, they can upload new images for classifications. Once new images are uploaded, they would appear in album. There is also an option for logging out accounts. After clicking on a specific image, users would be taken to view pages.
+
+\subsubsection{View Page}
+Here shows the classification results of an image. It contains four parts. The first part is the image itself. The remaining parts are different representations of classification results, with each of them having five values, which are organized based on classification probabilities. These includes a pie chart, a bar chart, and a table.
+
+\subsection{Backend Design}
+
+\subsubsection{Flask}
+The app is supported by Flask. Flask is a micro web framework written in Python and based on the Werkzeug toolkit and Jinja2 template engine.\cite{wiki:flask} Once a flask app is running on server, it receives requests from clients. It handles all incoming requests, and return data as requested. It works closely with local database which contains user data.
+
+\subsubsection{Celery}
+The app takes approximately 7 seconds to classify an image. It would not be user-friendly if it takes too long to respond. The app takes an asynchronous approach. Once an images is uploaded, it starts an asynchronous task using Celery, which executes in the background. Celery is an open source asynchronous task queue or job queue which is based on distributed message passing. While it supports scheduling, its focus is on operations in real time.\cite{wiki:flask}
+
+\subsection{Server Support}
+an AWS EC2 instance is serving as a server for the app. The instance type is c4.large. C4 instances are the latest generation of Compute-optimized instances, featuring the highest performing processors and the lowest price/compute performance in EC2. It has 2 virtual central processing units and 3.75GB memory. Several packages are installed and configured:
+
+\subsubsection{Redis-server}
+Redis is an open source Database, in-memory data structure store. It communicates with Celery for background task execution.
+
+\subsubsection{Supervisor}
+Supervisor is a client/server system that allows its users to monitor and control a number of processes on UNIX-like operating systems. It deals with the management of backend Flask app.
+
+\subsubsection{MySQL}
+MySQL is an open-source relational database management system. The app uses a MySQL database to store user information and image keys on S3.
+
+\subsection{Android Development}
+With Android Studio as IDE, the Android side of development is straightforward. The app's minimum SDK version is 15 (Android 4.0). Running with full-screen mode, the app is embedded with a WebView, which is standard component in Android to render web contents. With JAVASCRIPT enabled and several functions modified, the web app works more native on Android platform.
+
+\subsection{Classification Model}
+As mentioned above, the app uses Keras library with VGG16 model for image classification. To classify an image, firstly, VGG16 model is loaded with weights pre-trained on ImageNet. Secondly, it loads the image with target size 224 by 224. Thirdly, image data is converted to an array and been normalized. Then the image data is passed into classification model and been classified. Finally the app decodes the model outputs as different categories and gives top five 'winners' based on probabilities from high to low.
+
+\section{APP Demo}
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -561,10 +599,22 @@ The authors would like to thank...
 Simonyan, Karen, and Andrew Zisserman. "Very deep convolutional networks for large-scale image recognition." arXiv preprint arXiv:1409.1556 (2014).
 
 \bibitem{wiki:s3}
-Wikipedia contributors. "S3." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 4 Mar. 2017. Web. 29 Mar. 2017.
+Wikipedia contributors. "S3." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 4 Mar. 2017. Web. 30 Mar. 2017.
 
 \bibitem{wiki:ec2}
-Wikipedia contributors. "EC2." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 28 Apr. 2015. Web. 29 Mar. 2017.
+Wikipedia contributors. "EC2." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 28 Apr. 2015. Web. 30 Mar. 2017.
+
+\bibitem{wiki:rwd}
+Wikipedia contributors. "Responsive web design." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 27 Mar. 2017. Web. 30 Mar. 2017.
+
+\bibitem{wiki:bootstrap}
+Wikipedia contributors. "Bootstrap (front-end framework)." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 23 Feb. 2017. Web. 30 Mar. 2017.
+
+\bibitem{wiki:flask}
+Wikipedia contributors. "Flask (web framework)." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 20 Jan. 2017. Web. 30 Mar. 2017.
+
+\bibitem{wiki:celery}
+Wikipedia contributors. "Celery (software)." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 22 Feb. 2017. Web. 30 Mar. 2017.
 
 \end{thebibliography}
 
