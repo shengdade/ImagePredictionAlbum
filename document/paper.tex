@@ -117,6 +117,7 @@
 %
 \ifCLASSINFOpdf
   % \usepackage[pdftex]{graphicx}
+  \usepackage{graphicx}
   % declare the path(s) where your graphic files are
   % \graphicspath{{../pdf/}{../jpeg/}}
   % and their extensions so you won't have to specify these with
@@ -154,7 +155,7 @@
 % http://www.tug.org/applications/pdftex
 
 
-
+\usepackage{booktabs}
 
 
 % *** MATH PACKAGES ***
@@ -311,6 +312,10 @@
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+
 
 \begin{document}
 %
@@ -368,7 +373,7 @@ Email: dade.sheng@mail.utoronto.ca}}
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-The abstract goes here.
+Image Classification has been studied and developed for years. Machine learning models continue to show improvements on classification results. To explore more practical usage of these work, the paper describes the development of a cross-platform mobile app, called iPre, which runs in Android phones and web browsers. Part \rom{1} describes the background, and introduces iPre, which follows a web development pattern and uses services from Amazon Web Services. Part \rom{2} describes the structure of the app, from frontend to backend, with server support, Android development, and classification model. Part \rom{3} demonstrates the app on an Android device. Part \rom{4} demonstrates the app on a Chrome browser. Part \rom{5} concludes the work.
 \end{abstract}
 
 % no keywords
@@ -396,9 +401,9 @@ Our brains make vision seem easy. It doesn't take any effort for humans to tell 
 
 In the last few years the field of machine learning has made tremendous progress on addressing these difficult problems. In particular, it's been found that a kind of model called a deep convolutional neural network can achieve reasonable performance on hard visual recognition tasks -- matching or exceeding human performance in some domains. Basically, a model needs to be trained using existing datasets, after which the model is used to predict new inputs. However, the training process can take months to be complete for quite large training datasets. For predicting an image on a mobile device, it's inappropriate to include training process and let users wait months for results. So it would be a good idea to take advantage of pre-trained neural networks.
 
-Researchers have demonstrated steady progress in computer vision by validating their work against ImageNet -- an academic benchmark for computer vision. Successive models continue to show improvements, each time achieving a new state-of-the-art result: QuocNet, AlexNet, Inception (GoogLeNet), BN-Inception-v2. At the meantime, Python libraries for numerical computation in the field of machine learning have been developed, such as TensorFlow and Theano. Keras is a high-level neural networks API, written in Python and capable of running on top of either TensorFlow or Theano. It was developed with a focus on enabling fast experimentation. There are many trained image classification models for Keras, such as VGG16, VGG19, ResNet50, and Inception v3.
+Researchers have demonstrated steady progress in computer vision by validating their work against ImageNet -- an academic benchmark for computer vision. Successive models continue to show improvements, each time achieving a new state-of-the-art result: QuocNet, AlexNet, Inception (GoogLeNet), BN-Inception-v2. At the meantime, Python libraries for numerical computation in the field of machine learning have been developed, such as TensorFlow and Theano. Keras is a high-level neural networks API, written in Python and capable of running on top of either TensorFlow or Theano. It was developed with a focus on enabling fast experimentation. There are many trained image classification models for Keras, such as VGG16\cite{vgg16}, VGG19, ResNet50\cite{resnet}, and Inception v3\cite{inception}.
 
-iPre, is a mobile app for image classification using Keras library with VGG16\cite{vgg16} model. It behaves like a photo album. After registering an account, users can log in and upload their images. All the uploaded images would appear at main page. Clicking one of them, users would see predicted classifications of that image, presented in a pie chart, a bar chart and a probability table. All the images and their predictions are stored permanently, so users can always log back in and browse their images.
+iPre, is a mobile app for image classification using Keras library with VGG16 model. It behaves like a photo album. After registering an account, users can log in and upload their images. All the uploaded images would appear at main page. Clicking one of them, users would see predicted classifications of that image, presented in a pie chart, a bar chart and a probability table. All the images and their predictions are stored permanently, so users can always log back in and browse their images.
 
 \subsection{Web Based Application}
 The app is designed by web technologies to make it more flexible. Mobile apps are dependent on platforms. It requires different technologies to design an app in IOS and Android, or other mobile platforms. In some circumstances, a web application stands out because it's running in web browsers of both mobile and PC devices. Therefore, iPre was firstly developed as a web application, and then was migrated to an Android app. The development of Android side is rather straightforward. A web browser was embedded in the Android app to render contents fetched from remote server. In a similar way, it shouldn't take much effort to develop an IOS version, either on iPhone or iPad.
@@ -452,7 +457,69 @@ With Android Studio as IDE, the Android side of development is straightforward. 
 \subsection{Classification Model}
 As mentioned above, the app uses Keras library with VGG16 model for image classification. To classify an image, firstly, VGG16 model is loaded with weights pre-trained on ImageNet. Secondly, it loads the image with target size 224 by 224. Thirdly, image data is converted to an array and been normalized. Then the image data is passed into classification model and been classified. Finally the app decodes the model outputs as different categories and gives top five 'winners' based on probabilities from high to low.
 
-\section{APP Demo}
+\section{Android Demonstration}
+To better demonstrate the usage of iPre, this part walks through the functionalities from a user's perspective. It's been installed on Nexus 6, an Android device with API 25.
+
+\subsection{Log In}
+Figure \ref{fig:login} shows the log-in page, which allows the user register a new account or log in with an existing username. For demo purpose, a user named 'ece1780' has been created. Several images were already uploaded under this account.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[height=\linewidth]{login.png}
+  \caption{Log in.}
+  \label{fig:login}
+\end{figure}
+
+\subsection{Main Page}
+Figure \ref{fig:main} shows the main page, including an photo album, which lists all the images of the user 'ece1780'. The user can scroll and browse the images. There is a collapse button at top right corner. After clicking it, the user can choose to upload a new image, or log out current account.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[height=\linewidth]{main.png}
+  \caption{Main page.}
+  \label{fig:main}
+\end{figure}
+
+\subsection{Classification}
+If we choose an image from album in main page, iPre would lead us to classification page. Figure \ref{fig:view1} and figure \ref{fig:view2} shows us an example (bottom right corner image from album). There are three presentations of classification results, including a pie chart, a bar chart, and a table. Each presentation shows us five values of probability.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[height=\linewidth]{view1.png}
+  \caption{View page.}
+  \label{fig:view1}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[height=\linewidth]{view2.png}
+  \caption{View page.}
+  \label{fig:view2}
+\end{figure}
+
+\section{Browser Demonstration}
+Since it's built through a web development approach, it doesn't need to be confined to any specific platform. Figure \ref{fig:pc_login}, \ref{fig:pc_main} and \ref{fig:pc_view} show a web version of the app, which runs on a Chrome browser.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\linewidth]{pc_login.png}
+  \caption{Log in.}
+  \label{fig:pc_login}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\linewidth]{pc_main.png}
+  \caption{Main page.}
+  \label{fig:pc_main}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\linewidth]{pc_view.png}
+  \caption{View page.}
+  \label{fig:pc_view}
+\end{figure}
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -552,7 +619,27 @@ As mentioned above, the app uses Keras library with VGG16 model for image classi
 
 
 \section{Conclusion}
-The conclusion goes here.
+The work is related to Image Classification problem, which is the task of assigning an input image one label from a fixed set of categories. This is one of the core problems in Computer Vision that, despite its simplicity, has a large variety of practical applications. Taking advantage of pre-trained neural networks and high-level libraries, iPre classifies images uploaded to user's albums.
+It is platform-independent. Following a web development pattern, iPre was designed to be more flexible. It can be run on any browsers, or migrated to native mobile platforms, such as Android, IOS, and Windows Phone.
+It's simple to use and user-friendly. It improves user interface by different classification result interpretations, including two charts and a table.
+The app is currently running on an EC2 instance of type c4.large. It takes approximately 7 seconds to classify an image right now. Classification time depends on server performance. The better the server performs, the sooner it classifies. As listed in Table \ref{tab:table1}, classification time depends on EC2 instance types.
+
+\begin{table}[h!]
+  \centering
+  \caption{performance on difference EC2 instance types.}
+  \label{tab:table1}
+  \begin{tabular}{cccc}
+    \toprule
+    Model & vCPU & Mem (GiB) & Time (second)\\
+    \midrule
+    t2.micro & 1 & 1 & 50.42\\
+    t2.small & 1 & 2 & 35.87\\
+    m3.medium & 1 & 3.75 & 13.25\\
+    c4.large & 2 & 3.75 & 7.61\\
+    c4.4xlarge & 16 & 30 & 6.12\\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 
 
@@ -561,10 +648,10 @@ The conclusion goes here.
 
 
 % use section* for acknowledgment
-\section*{Acknowledgment}
+%\section*{Acknowledgment}
 
 
-The authors would like to thank...
+%The authors would like to thank...
 
 
 
@@ -598,6 +685,12 @@ The authors would like to thank...
 \bibitem{vgg16}
 Simonyan, Karen, and Andrew Zisserman. "Very deep convolutional networks for large-scale image recognition." arXiv preprint arXiv:1409.1556 (2014).
 
+\bibitem{resnet}
+He, Kaiming, et al. "Deep residual learning for image recognition." Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2016.
+
+\bibitem{inception}
+Szegedy, Christian, et al. "Rethinking the inception architecture for computer vision." Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2016.
+
 \bibitem{wiki:s3}
 Wikipedia contributors. "S3." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 4 Mar. 2017. Web. 30 Mar. 2017.
 
@@ -615,6 +708,9 @@ Wikipedia contributors. "Flask (web framework)." Wikipedia, The Free Encyclopedi
 
 \bibitem{wiki:celery}
 Wikipedia contributors. "Celery (software)." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 22 Feb. 2017. Web. 30 Mar. 2017.
+
+\bibitem{wiki:deep}
+Chatfield, Ken, Karen Simonyan, Andrea Vedaldi, and Andrew Zisserman. "Return of the devil in the details: Delving deep into convolutional nets." arXiv preprint arXiv:1405.3531 (2014).
 
 \end{thebibliography}
 
