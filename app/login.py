@@ -136,7 +136,7 @@ def a1():
 
 @webapp.route('/a1-admin')
 def a1_admin():
-    return redirect("http://ec2-54-175-182-31.compute-1.amazonaws.com", code=302)
+    return redirect("http://ec2-54-243-14-27.compute-1.amazonaws.com", code=302)
 
 
 @webapp.route('/iPre.apk')
